@@ -1,0 +1,158 @@
+{
+  "step-types": {
+    "script-module-step": [
+      {
+        "@type-id": "custom.CompareSiteCartridges",
+        "@supports-site-context": "true",
+        "@supports-organization-context": "false",
+        "description": "Step to compare cartridge paths between instances and write results to file",
+        "module": "./cartridge/scripts/jobs/CartridgePathComparisonReport.js",
+        "function": "execute",
+        "timeout-in-seconds": "1800",
+        "parameters": {
+          "parameters": [
+            {
+              "@name": "hostInstances",
+              "description": "List of host domain arrays (e.g., [['host1'], ['host2']])",
+              "@type": "string",
+              "@required": true,
+              "@trim": true
+            },
+            {
+              "@name": "ocapiVersion",
+              "description": "OCAPI version (e.g., v23_1)",
+              "@type": "string",
+              "@required": true,
+              "@trim": true
+            },
+            {
+              "@name": "serviceName",
+              "description": "Service Name for OCAPI",
+              "@type": "string",
+              "@required": true,
+              "@trim": true
+            },
+            {
+              "@name": "workingfolder",
+              "description": "Path under IMPEX/src where the comparison file will be saved",
+              "@type": "string",
+              "@required": false,
+              "@trim": true,
+              "default-value": "archive/cartridge-diff/"
+            },
+            {
+              "@name": "disableStep",
+              "description": "Disable this step",
+              "@type": "boolean",
+              "@required": false,
+              "@trim": true
+            }
+          ]
+        },
+        "status-codes": {
+          "status": [
+            {
+              "@code": "ERROR",
+              "description": "Used when an error occurred."
+            },
+            {
+              "@code": "OK",
+              "description": "Used when everything went well."
+            },
+            {
+              "@code": "WARN",
+              "description": "Used when small, but acceptable problems occurred."
+            }
+          ]
+        }
+      },
+      {
+        "@type-id": "custom.SendCartridgeComparisonMail",
+        "@supports-site-context": "false",
+        "@supports-organization-context": "true",
+        "description": "Step to send consolidated email if cartridge path differences are found",
+        "module": "app_utilities_audit/cartridge/scripts/jobs/SendSiteCartridgePathDifference.js",
+        "function": "execute",
+        "timeout-in-seconds": "900",
+        "parameters": {
+          "parameters": [
+            {
+              "@name": "workingfolder",
+              "description": "Path under IMPEX/src to read the comparison file from",
+              "@type": "string",
+              "@required": false,
+              "@trim": true,
+              "default-value": "archive/cartridge-diff/"
+            },
+            {
+              "@name": "emailTo",
+              "description": "Comma separated list of email recipients",
+              "@type": "string",
+              "@required": true,
+              "@trim": true
+            },
+            {
+              "@name": "emailFrom",
+              "description": "Sender email address",
+              "@type": "string",
+              "@required": true,
+              "@trim": true
+            },
+            {
+              "@name": "emailCC",
+              "description": "Comma separated list of recipients",
+              "@type": "string",
+              "@required": false,
+              "@trim": true
+            },
+            {
+              "@name": "emailSubject",
+              "description": "Subject of the cartridge comparison email",
+              "@type": "string",
+              "@required": true,
+              "@trim": true
+            },
+            {
+              "@name": "emailSubjectWithoutDiff",
+              "description": "Subject of the cartridge comparison email if no differences found",
+              "@type": "string",
+              "@required": true,
+              "@trim": true
+            },
+            {
+              "@name": "template",
+              "description": "ISML email template path",
+              "@type": "string",
+              "@required": true,
+              "@trim": true,
+              "default-value": "mail/cartridgeDiffReport"
+            },
+            {
+              "@name": "disableStep",
+              "description": "Disable this step",
+              "@type": "boolean",
+              "@required": false,
+              "@trim": true
+            }
+          ]
+        },
+        "status-codes": {
+          "status": [
+            {
+              "@code": "ERROR",
+              "description": "Used when an error occurred."
+            },
+            {
+              "@code": "OK",
+              "description": "Used when everything went well."
+            },
+            {
+              "@code": "WARN",
+              "description": "Used when small, but acceptable problems occurred."
+            }
+          ]
+        }
+      }
+    ]
+  }
+}
