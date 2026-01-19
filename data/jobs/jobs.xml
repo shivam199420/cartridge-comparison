@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jobs xmlns="http://www.demandware.com/xml/impex/jobs/2015-07-01">
+	<job job-id="Utilities-SiteCartridgePathComparison">
+        <description/>
+        <parameters/>
+        <split sequential="true">
+            <contexts template-ref="template_71">
+                <context site-id="en-AU"/>
+                <context site-id="en-HK"/>
+            </contexts>
+            <flow-template template-id="template_71">
+                <step step-id="SiteCartridgePathComparison" type="custom.CompareSiteCartridges" enforce-restart="false">
+                    <description/>
+                    <parameters>
+                        <parameter name="hostInstances">['abc.net', 'def.net']</parameter>
+                        <parameter name="ocapiVersion">v19_5</parameter>
+                        <parameter name="serviceName">Utilities-ocapi-Auth-token</parameter> // in this service we will provide the OCAPI credentials
+                        <parameter name="workingfolder">Archive/Utilities/siteCartridge</parameter>
+                    </parameters>
+                </step>
+            </flow-template>
+        </split>
+        <flow>
+            <context site-id="Sites"/>
+            <step step-id="SendCartridgeComparisonMail" type="custom.SendCartridgeComparisonMail" enforce-restart="false">
+                <description/>
+                <parameters>
+                    <parameter name="workingfolder">Archive/Utilities/siteCartridge</parameter>
+                    <parameter name="emailTo">shivam199420@gmail.com,sengar1994shivam@hotmail.com</parameter>
+                    <parameter name="emailFrom">shivam199420@gmail.com</parameter>
+                    <parameter name="emailSubject">Site Cartridge Path Comparision Report</parameter>
+                    <parameter name="emailSubjectWithoutDiff">No Differences Found</parameter>
+                </parameters>
+            </step>
+        </flow>
+        <rules/>
+        <triggers>
+            <run-once enabled="false">
+                <date>2025-09-01Z</date>
+                <time>11:55:00.000Z</time>
+            </run-once>
+        </triggers>
+    </job>
+</jobs>
